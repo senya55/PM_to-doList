@@ -1,0 +1,46 @@
+/* .mainDeal {
+    background-color: rgb(212, 212, 212);
+    height: 60px;
+    border-radius: 10px;
+    display: flex;
+    border: 1px solid rgb(39, 39, 39);
+    
+}
+
+.twoBtn {
+    margin-left: auto;
+} */
+
+.mainDeal {
+    /* background-color: rgb(212, 212, 212); */
+    border-radius: 10px;
+    display: flex;
+    border: 1px solid rgb(165, 165, 165);
+    padding: 14px;
+}
+
+.dealInfo {
+    display: flex;
+}
+
+.description {
+    max-width: 74%;
+    overflow: hidden;
+    display: -webkit-box;
+    /* Используем flexbox для поддержки многострочного текста */
+    -webkit-line-clamp: 10;
+    /* Ограничиваем количество строк (например, 10) */
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    white-space: normal;
+    /* Разрешаем перенос строк */
+    text-align: left;
+}
+
+.twoBtn {
+    margin-left: auto;
+    display: flex;
+    /* Используем flex для кнопок */
+    align-items: center;
+    /* Центрируем кнопки по вертикали */
+}
