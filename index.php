@@ -41,7 +41,7 @@
         die();
     }
 
-    $Link = mysqli_connect("127.0.0.1", "backend", "backend", "backend_toDo_list");
+    $Link = mysqli_connect("db", "backend", "backend", "backend_toDo_list");
     $UploadDir = "uploads";
 
     if(!$Link){
