@@ -45,15 +45,15 @@ fun DealItem(
     ){
         Row(
             modifier = Modifier
-                .background(if (deal.status) CompleteDealColor else Color.LightGray)
+                .background(if (deal.status == 1) CompleteDealColor else Color.LightGray)
                 .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             IconButton(onClick = { onStatusChange() }) {
                 Icon(
-                    imageVector = if (deal.status) Icons.Default.Check else Icons.Default.Close,
-                    contentDescription = if (deal.status) "Done" else "No done"
+                    imageVector = if (deal.status == 1) Icons.Default.Check else Icons.Default.Close,
+                    contentDescription = if (deal.status == 1) "Done" else "No done"
                 )
             }
 

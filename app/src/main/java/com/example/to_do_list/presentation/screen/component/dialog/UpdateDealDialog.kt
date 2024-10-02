@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -30,7 +31,7 @@ import com.example.to_do_list.data.model.DealModel
 
 @Composable
 fun UpdateDealDialog(
-    onUpdate: (String, String) -> Unit,
+    onUpdate: (String) -> Unit,
     onDismiss: () -> Unit,
     deal: DealModel
 ){
@@ -66,12 +67,12 @@ fun UpdateDealDialog(
                     fontWeight = FontWeight.W400
                 )
 
-                OutlinedTextField(
-                    value = name.value,
-                    onValueChange = { name.value = it },
-                    label = { Text(text = "Заголовок") },
-                    maxLines = 1,
-                    modifier = Modifier.fillMaxWidth()
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = name.value,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.W400
                 )
 
                 OutlinedTextField(
@@ -99,7 +100,7 @@ fun UpdateDealDialog(
                     TextButton(
                         enabled = name.value.isNotEmpty() && description.value.isNotEmpty(),
                         onClick = {
-                            onUpdate(name.value, description.value)
+                            onUpdate(description.value)
                         },
                         colors = ButtonDefaults.textButtonColors(
                             contentColor = Color.Green,

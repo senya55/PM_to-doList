@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircleOutline
 import androidx.compose.material.icons.filled.DownloadForOffline
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -52,6 +53,18 @@ fun DealScreen(
                 },
                 actions = {
                     IconButton(
+                        onClick = { viewModel.loadDeals() },
+                        modifier = Modifier
+                            .size(48.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Refresh,
+                            contentDescription = "Обновить",
+                            modifier = Modifier.size(36.dp)
+                        )
+                    }
+
+                    IconButton(
                         onClick = { viewModel.updateCreateDealOpen() },
                         modifier = Modifier
                             .size(48.dp)
@@ -63,17 +76,19 @@ fun DealScreen(
                         )
                     }
 
-                    IconButton(
-                        onClick = { (context as? MainActivity)?.selectFile() },
-                        modifier = Modifier
-                            .size(48.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.DownloadForOffline,
-                            contentDescription = "Загрузить",
-                            modifier = Modifier.size(36.dp)
-                        )
-                    }
+
+
+//                    IconButton(
+//                        onClick = { (context as? MainActivity)?.selectFile() },
+//                        modifier = Modifier
+//                            .size(48.dp)
+//                    ) {
+//                        Icon(
+//                            imageVector = Icons.Default.DownloadForOffline,
+//                            contentDescription = "Загрузить",
+//                            modifier = Modifier.size(36.dp)
+//                        )
+//                    }
 
                     IconButton(
                         onClick = { (context as? MainActivity)?.createFile() },
@@ -109,7 +124,7 @@ fun DealScreen(
                             items(dealState.dealList) { deal ->
                                 DealItem(
                                     deal = deal,
-                                    onStatusChange = { viewModel.changeDealStatus(deal.id) },
+                                    onStatusChange = { viewModel.changeDealStatus(deal.id, deal.status) },
                                     onClick = {
                                         viewModel.setSelectedDeal(deal.id)
                                         viewModel.updateReadDealOpen()
@@ -148,7 +163,7 @@ fun DealScreen(
     if (dealState.isUpdateDealOpen){
         viewModel.findDealById(dealState.selectedDealId)?.let {
             UpdateDealDialog(
-                onUpdate = { newName, newDescription -> viewModel.updateDeal(newName, newDescription) },
+                onUpdate = { newDescription -> viewModel.updateDeal(newDescription) },
                 onDismiss = { viewModel.updateUpdateDealOpen() },
                 deal = it
             )

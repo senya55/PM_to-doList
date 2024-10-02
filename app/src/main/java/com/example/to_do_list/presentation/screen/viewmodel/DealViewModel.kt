@@ -7,7 +7,11 @@ import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.to_do_list.data.model.ChangeDealModel
+import com.example.to_do_list.data.model.CreateDealModel
 import com.example.to_do_list.data.model.DealModel
+import com.example.to_do_list.data.model.StatusModel
+import com.example.to_do_list.data.repository.DealApiRepository
 import com.example.to_do_list.data.repository.DealRepository
 import com.example.to_do_list.domain.state.DealState
 import com.google.gson.Gson
@@ -28,15 +32,17 @@ class DealViewModel(
     val dealState: StateFlow<DealState> = _dealState.asStateFlow()
 
     private val repository = DealRepository(application)
+    private val apiRepository = DealApiRepository()
 
     init {
         loadDeals()
-
     }
 
-    private fun loadDeals() {
-        val deals = repository.loadDeals()
-        _dealState.value = DealState(dealList = deals)
+    fun loadDeals() {
+        viewModelScope.launch {
+            val deals = apiRepository.getDeals()
+            _dealState.value = DealState(dealList = deals)
+        }
     }
 
     fun updateCreateDealOpen() {
@@ -60,80 +66,63 @@ class DealViewModel(
     }
 
     fun createNewDeal(name: String, description: String) {
-        _dealState.update { currentState ->
-            val newId = generateId()
-            val newDeal = DealModel(
-                id = newId,
-                name = name,
-                description = description,
-                status = false
-            )
-
-            currentState.copy(dealList = currentState.dealList + newDeal)
+        val newDeal = CreateDealModel(
+            name = name,
+            description = description,
+            status = 0
+        )
+        viewModelScope.launch {
+            apiRepository.createDeal(newDeal)
+            loadDeals()
         }
         updateCreateDealOpen()
-        saveDeals()
     }
 
-    fun updateDeal(newName: String, newDescription: String) {
+    fun updateDeal(newDescription: String) {
         val id = dealState.value.selectedDealId ?: return
 
-        _dealState.update { currentState ->
-            val updatedDealList = currentState.dealList.map { deal ->
-                if (deal.id == id) {
-                    deal.copy(name = newName, description = newDescription)
-                } else {
-                    deal
-                }
-            }
-            currentState.copy(dealList = updatedDealList)
+        val dealDescription = ChangeDealModel(newDescription)
+        viewModelScope.launch {
+            apiRepository.changeDealDescription(id, dealDescription)
+            loadDeals()
         }
 
         updateUpdateDealOpen()
-        saveDeals()
     }
 
     fun deleteDeal() {
-        _dealState.update { currentState ->
-            val updatedDealList = currentState.dealList.filterNot {
-                it.id == dealState.value.selectedDealId
-            }
-            currentState.copy(dealList = updatedDealList)
+        val id = dealState.value.selectedDealId ?: return
+        viewModelScope.launch {
+            apiRepository.deleteDeal(id)
+            loadDeals()
         }
-
         updateDeleteDealOpen()
-        saveDeals()
     }
 
-    fun changeDealStatus(id: Long) {
-        _dealState.update { currentState ->
-            val updatedDealList = currentState.dealList.map { deal ->
-                if (deal.id == id) {
-                    deal.copy(status = !deal.status)
-                } else {
-                    deal
-                }
-            }
-            currentState.copy(dealList = updatedDealList)
+    fun changeDealStatus(id: String, currentStatus: Int) {
+        val newStatus = if (currentStatus == 1) 0 else 1
+        val statusModel = StatusModel(newStatus)
+        viewModelScope.launch {
+            apiRepository.changeStatus(id, statusModel)
+            loadDeals()
         }
-        saveDeals()
     }
 
-    fun setSelectedDeal(id: Long?) {
+    fun setSelectedDeal(id: String?) {
         _dealState.update { it.copy(selectedDealId = id) }
     }
 
-    fun findDealById(id: Long?): DealModel? {
+    fun findDealById(id: String?): DealModel? {
         return _dealState.value.dealList.find { it.id == id }
     }
 
-    private fun generateId(): Long {
-        return if (_dealState.value.dealList.isEmpty()) {
-            1L
-        } else {
-            _dealState.value.dealList.maxOf { it.id } + 1
-        }
-    }
+//    private fun generateId(): String {
+//        return if (_dealState.value.dealList.isEmpty()) {
+//            "1"
+//        } else {
+//            _dealState.value.dealList.maxOf { it.id } + 1
+//        }
+//    }
 
     fun saveDealsToUri(context: Context, uri: Uri) {
         try {

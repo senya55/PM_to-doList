@@ -17,5 +17,5 @@ data class DealState(
     val isUpdateDealOpen: Boolean = false,
     val isReadDialogOpen: Boolean = false,
 
-    val selectedDealId: Long? = null
+    val selectedDealId: String? = null
 )
