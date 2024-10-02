@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const getListOfDeals = (setDeals) => {
-    const response = axios.get('http://toDoList/api/deal')
+    const response = axios.get('http://91.184.243.83:8085/api/deal')
         .then(response => {
             console.log("iiii", response.data);
             setDeals(response.data)
@@ -11,7 +11,7 @@ const getListOfDeals = (setDeals) => {
 }
 
 const deleteDeal = (id) => {
-    const response = axios.delete(`http://toDoList/api/deal/${id}`)
+    const response = axios.delete(`http://91.184.243.83:8085/api/deal/${id}`)
         .then(response => {
             console.log("iiii", response.data);
             // setDeals(response.data)
@@ -19,7 +19,7 @@ const deleteDeal = (id) => {
 }
 
 const addDeal = (setDeals, body) => {
-    const response = axios.post('http://toDoList/api/deal/deal', body)
+    const response = axios.post('http://91.184.243.83:8085/api/deal/deal', body)
         .then(response => {
             console.log("iiii", response.data);
             // setDeals(response.data)
@@ -30,7 +30,7 @@ const addDeal = (setDeals, body) => {
 }
 
 const editDescriptionOfDeal = (body, id) => {
-    const response = axios.put(`http://toDoList/api/deal/description/${id}`, body)
+    const response = axios.put(`http://91.184.243.83:8085/api/deal/description/${id}`, body)
         .then(response => {
             console.log("iiii", response.data);
             // setDeals(response.data)
@@ -40,7 +40,7 @@ const editDescriptionOfDeal = (body, id) => {
 }
 
 const editStatusOfDeal = (body, id) => {
-    const response = axios.put(`http://toDoList/api/deal/status/${id}`, body)
+    const response = axios.put(`http://91.184.243.83:8085/api/deal/status/${id}`, body)
         .then(response => {
             console.log("iiii", response.data);
             // setDeals(response.data)
