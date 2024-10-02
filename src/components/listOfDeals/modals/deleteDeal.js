@@ -2,6 +2,7 @@ import { useContext, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { DealsContext } from '../../../dealsContext';
+import { dealAPI } from '../../../API/dealAPI';
 
 const DeleteDeal = ({ show, handleClose, id }) => {
 
@@ -9,7 +10,7 @@ const DeleteDeal = ({ show, handleClose, id }) => {
 
     const deleteDeal = () => {
         const updatedDeals = deals.filter(deal => deal.id !== id);
-
+        dealAPI.deleteDeal(id);
         // Обновляем состояние
         setDeals(updatedDeals);
         handleClose();

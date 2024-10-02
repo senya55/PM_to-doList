@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useParams } from 'react-router-dom';
 import { DealsContext } from '../../dealsContext';
+import { dealAPI } from '../../API/dealAPI';
 
 const MainDeal = () => {
 
@@ -21,7 +22,7 @@ const MainDeal = () => {
         const foundDeal = deals.find(deal => deal.id === id);
         if (foundDeal) {
             setDeal(foundDeal);
-            setStatus(foundDeal.status === "Done"); // Устанавливаем статус при загрузке дела
+            setStatus(foundDeal.status > 0); // Устанавливаем статус при загрузке дела
         }
     }, [id, deals]);
 
@@ -34,8 +35,12 @@ const MainDeal = () => {
     };
 
     const saveStatus = () => {
+        const requestBody = {
+            status: status ? 1 : 0
+        }
+        dealAPI.editStatusOfDeal(requestBody, id);
         const updatedDeals = deals.map(d =>
-            d.id === id ? { ...d, status: status ? "Done" : "Not Done" } : d
+            d.id === id ? { ...d, status: status ? 1 : 0 } : d
         );
         setDeals(updatedDeals);
     };

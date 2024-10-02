@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import DeleteDeal from './modals/deleteDeal';
 import EditDeal from './modals/editDeal';
 
-const CardOfDeal = ({ id, status, description }) => {
+const CardOfDeal = ({ id, status, description, name }) => {
 
     //edit
     const [showEdit, setShowEdit] = useState(false);
@@ -23,18 +23,27 @@ const CardOfDeal = ({ id, status, description }) => {
 
     let backColor;
     let textColor;
-    if (status === "Done") {
-        backColor = '#9dff9c';
+    if (status == 0) {
+        backColor = '#d4d4d4';
     }
     else {
-        backColor = '#d4d4d4';
+        backColor = '#9dff9c';
+    }
+
+    let statu;
+    if (status == 0) {
+        statu = "None"
+    }
+    else {
+        statu = "Done"
     }
     return (
 
         <div className="mainDeal mx-5 mt-3" style={{ background: backColor }}>
             <Nav.Link as={Link} to={`/info/${id}`}>
                 <div className="dealInfo">
-                    <div className='ms-4 mt-2'>{status}</div>
+                    <div className='ms-4 mt-2'>{statu}</div>
+                    <div className='name ms-4 mt-2'>{name}</div>
                     <div className='description ms-4 mt-2'>{description}</div>
 
                 </div>

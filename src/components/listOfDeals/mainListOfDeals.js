@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button';
 import CardOfDeal from './cardOfDeal';
 import { DealsContext } from '../../dealsContext';
 import { type } from '@testing-library/user-event/dist/type';
+import { dealAPI } from '../../API/dealAPI';
 
 const MainListOfDeal = () => {
 
@@ -63,6 +64,11 @@ const MainListOfDeal = () => {
 
     const { deals, setDeals } = useContext(DealsContext);
 
+    useEffect(() => {
+        dealAPI.getListOfDeals(setDeals);
+    }, [])
+    console.log(deals);
+
     function saveAll(deals) {
         let textDeals = JSON.stringify(deals);
         let a = document.createElement("a");
@@ -98,14 +104,15 @@ const MainListOfDeal = () => {
 
     return (
         <div>
-            <Button variant="success" onClick={saveFile} className='me-3'>Save</Button>
-            <input type='file' className='ms-3' onChange={openFile} />
+            {/* <Button variant="success" onClick={saveFile} className='me-3'>Save</Button>
+            <input type='file' className='ms-3' onChange={openFile} /> */}
             {deals.map(deal => (
                 <CardOfDeal
                     key={deal.id}
                     id={deal.id}
                     status={deal.status}
                     description={deal.description}
+                    name={deal.name}
                 />
             ))}
 
